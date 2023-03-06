@@ -6,7 +6,7 @@
 * Protecting PII and personal data
 * Log keeping
 
-## Projects
+## Tasks
 0. Function called `filter_datum` that returns the log message obfuscated.
     * [filtered_logger.py](filtered_logger.py)
 1. `RedactingFormatter` class for creating custom log formatters that redact specified sensitive information
