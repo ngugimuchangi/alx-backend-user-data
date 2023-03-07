@@ -69,8 +69,12 @@ class BasicAuth(Auth):
             return None
         if not user_pwd or type(user_pwd) is not str:
             return None
-        users = User.search(attributes={"email": user_email})
-        if len(users) <= 0:
+        try:
+            users = User.search(attributes={"email": user_email})
+        except Exception: # Need to fix pokemon exception handling.
+            return None
+    
+        if not users :
             return None
         for user in users:
             if user.is_valid_password(user_pwd):
