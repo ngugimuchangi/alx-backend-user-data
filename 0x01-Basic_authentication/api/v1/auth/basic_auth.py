@@ -69,8 +69,12 @@ class BasicAuth(Auth):
             return None
         if not user_pwd or type(user_pwd) is not str:
             return None
+
         try:
             users = User.search(attributes={"email": user_email})
+        # Exception from passing unknown s_class to DATA
+        # Check module base.py lines 12 and 125-137(instance method
+        # 'search')
         except KeyError:
             return None
 
