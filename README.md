@@ -2,6 +2,7 @@
 
 ## About
 - Handling and protecting user data
+- User authentication
 
 ## Projects
 - #### [0x00-personal_data](0x00-personal_data)
