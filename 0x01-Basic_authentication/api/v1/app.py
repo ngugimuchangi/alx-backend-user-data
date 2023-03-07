@@ -43,24 +43,24 @@ def forbidden(error):
     return jsonify({"error": "Forbidden"}), 403
 
 
-# @app.before_request
-# def before_request():
-#     """ Actions before serving a request
-#     """
-#     # Authorization parameter not set
-#     if not auth:
-#         return
-#     # Check if path doesn't require authorization
-#     if not auth.require_auth(request.path, ['/api/v1/status/',
-#                                             '/api/v1/unauthorized/',
-#                                             '/api/v1/forbidden/']):
-#         return
-#     # Check authorization header if path requires authorization
-#     if not auth.authorization_header(request):
-#         abort(401)
-#     # Check if current user is authorized to access the route
-#     if not auth.current_user(request):
-#         abort(403)
+@app.before_request
+def before_request():
+    """ Actions before serving a request
+    """
+    # Authorization parameter not set
+    if not auth:
+        return
+    # Check if path doesn't require authorization
+    if not auth.require_auth(request.path, ['/api/v1/status/',
+                                            '/api/v1/unauthorized/',
+                                            '/api/v1/forbidden/']):
+        return
+    # Check authorization header if path requires authorization
+    if not auth.authorization_header(request):
+        abort(401)
+    # Check if current user is authorized to access the route
+    if not auth.current_user(request):
+        abort(403)
 
 
 if __name__ == "__main__":
