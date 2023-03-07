@@ -7,7 +7,7 @@ import binascii
 from api.v1.auth.auth import Auth
 from base64 import b64decode
 from models.user import User
-from typing import  Optional, Tuple, TypeVar
+from typing import Optional, Tuple, TypeVar
 
 
 class BasicAuth(Auth):
@@ -87,4 +87,3 @@ class BasicAuth(Auth):
         email, pwd = self.extract_user_credentials(decode_b64_str)
         user = self.user_object_from_credentials(email, pwd)
         return user
-

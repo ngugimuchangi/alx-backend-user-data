@@ -23,7 +23,6 @@ class Auth:
             return True
         return False
 
-
     def authorization_header(self, request=None) -> Optional[str]:
         """ Check for authorization header in request
             Return:
