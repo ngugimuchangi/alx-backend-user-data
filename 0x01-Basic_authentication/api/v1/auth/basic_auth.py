@@ -73,7 +73,8 @@ class BasicAuth(Auth):
             users = User.search(attributes={"email": user_email})
         except KeyError:
             return None
-        if not users :
+
+        if not users:
             return None
         for user in users:
             if user.is_valid_password(user_pwd):
