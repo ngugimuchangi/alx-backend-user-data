@@ -71,9 +71,8 @@ class BasicAuth(Auth):
             return None
         try:
             users = User.search(attributes={"email": user_email})
-        except Exception: # Need to fix pokemon exception handling.
+        except KeyError:
             return None
-    
         if not users :
             return None
         for user in users:
