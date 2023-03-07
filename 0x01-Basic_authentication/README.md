@@ -14,8 +14,10 @@
 ### `api/v1`
 
 - `app.py`: entry point of the API
-- `views/index.py`: basic endpoints of the API: `/status` and `/stats`
+- `views/index.py`: basic endpoints of the API: `/status`, `/stats`, `authorized` and `forbidden`
 - `views/users.py`: all users endpoints
+- `auth/auth.py`: authentication base module
+- `auth/basic_auth.py`: basic authentication module
 
 
 ## Setup
