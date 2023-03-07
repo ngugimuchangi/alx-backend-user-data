@@ -1,7 +1,8 @@
-# Simple API
+# Basic Authentication Simple API
 
-Simple HTTP API for playing with `User` model.
-
+## About
+- Simple HTTP API for playing with `User` model.
+- Implements `Basic Authentication` scheme
 
 ## Files
 
