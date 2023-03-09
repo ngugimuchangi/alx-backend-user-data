@@ -9,7 +9,8 @@ from typing import Tuple, Union
 from os import getenv
 
 
-@app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
+@app_views.route('/auth_session/login', methods=['POST'],
+                 strict_slashes=False)
 def login() -> Union[Tuple[Response, int], Response]:
     """ Session authentication route
         POST parameters:
