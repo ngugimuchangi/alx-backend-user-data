@@ -19,10 +19,13 @@ class SessionDBAuth(SessionExpAuth):
             Return:
                 - id of session object
         """
-        if user_id and type(user_id) is str:
-            session = UserSession(**{"user_id": user_id})
-            session.save()
-            return session.id
+        if not user_id or type(user_id) is not str:
+            return None
+
+        session = UserSession(**{"user_id": user_id})
+        session.save()
+        SessionDBAuth.user_id_by_session_id[session.id] = session.user_id
+        return session.id
 
     def user_id_for_session_id(self, session_id: str = None) -> str:
         """ Get user by session id
@@ -45,27 +48,25 @@ class SessionDBAuth(SessionExpAuth):
             + timedelta(seconds=self.session_duration)
         if datetime.utcnow() < expiry_date:
             return session.user_id
+        SessionDBAuth.user_id_by_session_id.pop(session_id)
         session.remove()
         return None
 
-    def current_user(self, request=None) -> TypeVar('User'):
-        """ Get current user
-            Return:
-                - User object for user instance whose user id is
-                  linked to given session id
-        """
-        if not request:
-            return None
-        session_id = self.session_cookie(request)
-        if not session_id:
-            return None
-        user_id = self.user_id_for_session_id(session_id)
-        if not user_id:
-            return None
-        try:
-            return User.get(user_id)
-        except KeyError:
-            return None
+    # def current_user(self, request=None) -> TypeVar('User'):
+    #     """ Get current user
+    #         Return:
+    #             - User object for user instance whose user id is
+    #               linked to given session id
+    #     """
+    #     if not request:
+    #         return None
+    #     session_id = self.session_cookie(request)
+    #     user_id = self.user_id_for_session_id(session_id)
+
+    #     try:
+    #         return User.get(user_id)
+    #     except KeyError:
+    #         return None
 
     def destroy_session(self, request=None) -> bool:
         """ Destroy session object based on session id
@@ -73,14 +74,13 @@ class SessionDBAuth(SessionExpAuth):
         if not request:
             return False
         session_id = self.session_cookie(request)
-        if not session_id:
-            return False
         try:
             session = UserSession.get(session_id)
         except KeyError:
             return False
         else:
             if session:
+                SessionDBAuth.user_id_by_session_id.pop(session.id)
                 session.remove()
                 return True
         return False

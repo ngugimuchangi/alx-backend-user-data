@@ -10,6 +10,7 @@ import os
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
+app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 auth = None
 # Check authentication type
@@ -83,4 +84,4 @@ def before_request():
 if __name__ == "__main__":
     host = getenv("API_HOST", "0.0.0.0")
     port = getenv("API_PORT", "5000")
-    app.run(host=host, port=port)
+    app.run(host=host, port=port, debug=True)
