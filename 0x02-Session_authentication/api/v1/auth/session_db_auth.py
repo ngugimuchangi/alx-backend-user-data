@@ -19,13 +19,16 @@ class SessionDBAuth(SessionExpAuth):
             Return:
                 - id of session object
         """
-        session = UserSession(**{"user_id": user_id})
-        session.save()
-        return session.id
+        if user_id and type(user_id) is str:
+            session = UserSession(**{"user_id": user_id})
+            session.save()
+            return session.id
 
     def user_id_for_session_id(self, session_id: str = None) -> str:
         """ Get user by session id
         """
+        if not session_id or type(session_id) is not str:
+            return None
         try:
             session = UserSession.get(session_id)
         except KeyError:
