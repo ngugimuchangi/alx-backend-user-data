@@ -2,15 +2,15 @@
 """ Session authentication route module
 """
 from api.v1.views import app_views
-from flask import abort, jsonify, make_response, request, Response
+from flask import abort, jsonify, make_response, request
 from models.user import User
-from typing import Tuple, Union
+# from typing import Tuple, Union
 from os import getenv
 
 
 @app_views.route('/auth_session/login', methods=['POST'],
                  strict_slashes=False)
-def login() -> Union[Tuple[Response, int], Response]:
+def login():
     """ Session authentication route
         POST parameters:
             - email: user's email
@@ -42,7 +42,7 @@ def login() -> Union[Tuple[Response, int], Response]:
 
 @app_views.route('/auth_session/logout', methods=['DELETE'],
                  strict_slashes=False)
-def logout() -> Response:
+def logout():
     """ Logs out user and destroys session
         User needs to be logged in with a session
         id associated with their user_id
