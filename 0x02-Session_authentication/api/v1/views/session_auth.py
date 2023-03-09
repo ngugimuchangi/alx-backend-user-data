@@ -18,7 +18,6 @@ def login() -> Union[Tuple[Response, int], Response]:
             - password: user's password
         Returns - response with user details and session cookie
     """
-    from api.v1.app import auth
     email = request.form.get('email')
     pwd = request.form.get('password')
     if not email:
@@ -35,6 +34,7 @@ def login() -> Union[Tuple[Response, int], Response]:
             break
     if not current_user:
         return jsonify({"error": "wrong password"}), 401
+    from api.v1.app import auth
     session_id = auth.create_session(user.id)
     response = make_response(jsonify(user.to_json()), 200)
     response.set_cookie(getenv('SESSION_NAME'), session_id)
