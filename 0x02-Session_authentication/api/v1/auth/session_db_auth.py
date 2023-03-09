@@ -71,5 +71,7 @@ class SessionDBAuth(SessionExpAuth):
         except KeyError:
             return False
         else:
-            session.remove()
-            return True
+            if session:
+                session.remove()
+                return True
+        return False
