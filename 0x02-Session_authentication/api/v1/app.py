@@ -68,15 +68,10 @@ def before_request():
 
     # Check for existence of an authentication scheme
     # Either: session authentication and basic auth
-    try:
-        session_cookie = auth.session_cookie(request)
-    # auth of object of type BasicAuth lacks session_cookie method
-    except AttributeError:
-        if not auth.authorization_header(request):
-            abort(401)
-    else:
-        if not session_cookie and not auth.authorization_header(request):
-            abort(401)
+    session_cookie = auth.session_cookie(request)
+    auth_header = auth.authorization_header(request)
+    if not session_cookie and not auth_header:
+        abort(401)
 
     # Check if current user is authorized to access the route
     current_user = auth.current_user(request)
