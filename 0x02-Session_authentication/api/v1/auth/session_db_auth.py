@@ -47,7 +47,6 @@ class SessionDBAuth(SessionExpAuth):
             return session.user_id
         session.remove()
         return None
-        
 
     def current_user(self, request=None) -> TypeVar('User'):
         """ Get current user
@@ -58,7 +57,11 @@ class SessionDBAuth(SessionExpAuth):
         if not request:
             return None
         session_id = self.session_cookie(request)
+        if not session_id:
+            return None
         user_id = self.user_id_for_session_id(session_id)
+        if not user_id:
+            return None
         try:
             return User.get(user_id)
         except KeyError:
@@ -70,6 +73,8 @@ class SessionDBAuth(SessionExpAuth):
         if not request:
             return False
         session_id = self.session_cookie(request)
+        if not session_id:
+            return False
         try:
             session = UserSession.get(session_id)
         except KeyError:
