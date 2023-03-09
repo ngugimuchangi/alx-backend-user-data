@@ -43,7 +43,7 @@ class SessionDBAuth(SessionExpAuth):
         # Check for expired session
         expiry_date = session.created_at \
             + timedelta(seconds=self.session_duration)
-        if datetime.utcnow() >= expiry_date:
+        if datetime.utcnow() > expiry_date:
             session.remove()
             return None
         return session.user_id
