@@ -11,7 +11,7 @@ from os import getenv
 
 @app_views.route('/auth_session/login', methods=['POST'],
                  strict_slashes=False)
-def login() -> str:
+def login() -> Union[Tuple[Response, int], Response]:
     """ Session authentication route
         POST parameters:
             - email: user's email
@@ -43,7 +43,7 @@ def login() -> str:
 
 @app_views.route('/auth_session/logout', methods=['DELETE'],
                  strict_slashes=False)
-def logout() -> str:
+def logout() -> Response:
     """ Logs out user and destroys session
         User needs to be logged in with a session
         id associated with their user_id
