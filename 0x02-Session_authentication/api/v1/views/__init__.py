@@ -2,8 +2,6 @@
 """ DocDocDocDocDocDoc
 """
 from flask import Blueprint
-# from models.user_session import UserSession
-
 
 app_views = Blueprint("app_views", __name__, url_prefix="/api/v1")
 
