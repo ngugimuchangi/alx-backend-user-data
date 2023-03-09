@@ -4,7 +4,7 @@ Session authentication module
 """
 from api.v1.auth.auth import Auth
 from models.user import User
-from typing import Any, Dict, TypeVar
+from typing import Dict, TypeVar
 from uuid import uuid4
 from os import getenv
 
@@ -32,16 +32,6 @@ class SessionAuth(Auth):
         """
         if session_id and type(session_id) is str:
             return SessionAuth.user_id_by_session_id.get(session_id)
-
-    def session_cookie(self, request=None) -> Any:
-        """ Get session id from a request's session cookie
-            Return:
-                - session id stored in cookie
-        """
-        if not request:
-            return None
-        session_cookie = request.cookies.get(getenv('SESSION_NAME'))
-        return session_cookie
 
     def current_user(self, request=None) -> TypeVar('User'):
         """ Get current user associated with specific session id
