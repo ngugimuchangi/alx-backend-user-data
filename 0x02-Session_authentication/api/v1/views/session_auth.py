@@ -4,7 +4,6 @@
 from api.v1.views import app_views
 from flask import abort, jsonify, make_response, request
 from models.user import User
-# from typing import Tuple, Union
 from os import getenv
 
 
