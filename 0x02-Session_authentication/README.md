@@ -34,27 +34,27 @@ $ pip3 install -r requirements.txt
 
 ## Run
 
-#### Without authentication
+- Without authentication
 ```
 $ API_HOST=0.0.0.0 API_PORT=5000 python3 -m api.v1.app
 ```
-#### Basic authentication
+- Basic authentication
 ```
 $ API_HOST=0.0.0.0 API_PORT=5000 AUTH_TYPE=basic_auth python3 -m api.v1.app
 ```
-#### Infinite session authentication
+- Infinite session authentication
 ```
 $ API_HOST=0.0.0.0 API_PORT=5000 AUTH_TYPE=session_auth SESSION_NAME='name_of_session_cookie' python3 -m api.v1.app
 ```
-#### Expiring session authentication
+- Expiring session authentication
 ```
 $ API_HOST=0.0.0.0 API_PORT=5000 AUTH_TYPE=session_exp_auth SESSION_NAME='name_of_session_cookie' SESSION_DURATION=60 python3 -m api.v1.app
 ```
-#### Expiring session without session duration constraint
+- Expiring session without session duration constraint
 ```
 $ API_HOST=0.0.0.0 API_PORT=5000 AUTH_TYPE=session_exp_auth SESSION_NAME='name_of_session_cookie' python3 -m api.v1.app
 ```
-#### Persistent session authentication. Persists even if the server is shutdown. 
+- Persistent session authentication. Persists even if the server is shutdown. 
 ```
 $ API_HOST=0.0.0.0 API_PORT=5000 AUTH_TYPE=session_exp_auth SESSION_NAME='name_of_session_cookie' SESSION_DURATION=60 python3 -m api.v1.app
 ```
