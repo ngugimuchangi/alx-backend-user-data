@@ -41,12 +41,13 @@ class SessionDBAuth(SessionExpAuth):
             return session.user_id
 
         # Check for expired session
-        expiry_date = session.created_at \
+        expiry_date = session.updated_at \
             + timedelta(seconds=self.session_duration)
-        if datetime.utcnow() > expiry_date:
-            session.remove()
-            return None
-        return session.user_id
+        if datetime.utcnow() < expiry_date:
+            return session.user_id
+        session.remove()
+        return None
+        
 
     def current_user(self, request=None) -> TypeVar('User'):
         """ Get current user
