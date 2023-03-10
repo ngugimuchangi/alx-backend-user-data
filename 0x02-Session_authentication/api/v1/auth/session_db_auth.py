@@ -21,8 +21,9 @@ class SessionDBAuth(SessionExpAuth):
 
         session = UserSession(**{"user_id": user_id})
         session.save()
-        SessionDBAuth.user_id_by_session_id[session.id] = session.user_id
-        return session.id
+        SessionDBAuth.user_id_by_session_id[session.session_id] =\
+            session.user_id
+        return session.session_id
 
     def user_id_for_session_id(self, session_id: str = None) -> str:
         """ Get user by session id
@@ -30,11 +31,12 @@ class SessionDBAuth(SessionExpAuth):
         if not session_id or type(session_id) is not str:
             return None
         try:
-            session = UserSession.get(session_id)
+            sessions = UserSession.search({"session_id": session_id})
         except KeyError:
             return None
-        if not session:
+        if not sessions:
             return None
+        session = sessions[0]
 
         # Session with infinity lifespan
         if self.session_duration <= 0:
@@ -56,12 +58,13 @@ class SessionDBAuth(SessionExpAuth):
             return False
         session_id = self.session_cookie(request)
         try:
-            session = UserSession.get(session_id)
+            sessions = UserSession.search({"session_id": session_id})
         except KeyError:
             return False
         else:
-            if session:
-                SessionDBAuth.user_id_by_session_id.pop(session.id)
+            if sessions:
+                session = sessions[0]
+                SessionDBAuth.user_id_by_session_id.pop(sessions.id)
                 session.remove()
                 return True
         return False
