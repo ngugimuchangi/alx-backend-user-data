@@ -61,10 +61,10 @@ class SessionDBAuth(SessionExpAuth):
             sessions = UserSession.search({"session_id": session_id})
         except KeyError:
             return False
-        else:
-            if sessions:
-                session = sessions[0]
-                SessionDBAuth.user_id_by_session_id.pop(session.session_id)
-                session.remove()
-                return True
+
+        if sessions:
+            session = sessions[0]
+            SessionDBAuth.user_id_by_session_id.pop(session.session_id)
+            session.remove()
+            return True
         return False
