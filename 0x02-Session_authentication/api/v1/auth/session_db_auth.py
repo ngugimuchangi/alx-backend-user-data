@@ -64,7 +64,7 @@ class SessionDBAuth(SessionExpAuth):
         else:
             if sessions:
                 session = sessions[0]
-                SessionDBAuth.user_id_by_session_id.pop(sessions.session_id)
+                SessionDBAuth.user_id_by_session_id.pop(session.session_id)
                 session.remove()
                 return True
         return False
