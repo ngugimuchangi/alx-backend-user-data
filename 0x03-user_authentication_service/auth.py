@@ -51,7 +51,8 @@ class Auth:
             return False
         return True
 
-    def _generate_uuid(self) -> str:
+    @staticmethod
+    def _generate_uuid() -> str:
         """ Generates unique ids
         """
         return str(uuid4())
