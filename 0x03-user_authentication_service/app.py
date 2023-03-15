@@ -7,7 +7,8 @@ from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
-auth = Auth()
+app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
+AUTH = Auth()
 
 
 @app.route("/")
@@ -24,7 +25,7 @@ def register_user() -> str:
     email = request.form.get("email")
     password = request.form.get("password")
     try:
-        auth.register_user(email, password)
+        AUTH.register_user(email, password)
         return jsonify({"email": email, "message": "user created"}), 201
     except ValueError:
         return jsonify({"message": "email already registered"}), 400
