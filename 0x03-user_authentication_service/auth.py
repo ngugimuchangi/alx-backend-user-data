@@ -5,6 +5,7 @@ Authentication module
 import bcrypt
 from db import DB
 from user import User
+from uuid import uuid4
 from sqlalchemy.orm.exc import NoResultFound
 
 
@@ -49,3 +50,8 @@ class Auth:
         if not bcrypt.checkpw(password.encode('utf-8'), user.hashed_password):
             return False
         return True
+
+    def _generate_uuid(self) -> str:
+        """ Generates unique ids
+        """
+        return str(uuid4())
