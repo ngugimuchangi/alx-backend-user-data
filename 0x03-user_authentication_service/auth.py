@@ -18,6 +18,11 @@ class Auth:
 
     def register_user(self, email: str, password: str) -> User:
         """ Registers new user
+            Args:
+                - email: user's email
+                - password: user's password
+            Return:
+                - User instance created
         """
         db = self._db
         try:
@@ -30,6 +35,11 @@ class Auth:
 
     def valid_login(self, email: str, password: str) -> bool:
         """ Checks if password is valid
+            Args:
+                - email: user's email
+                - password: user's password
+            Return:
+                - True if credentials are valid, otherwise False
         """
         db = self._db
         try:
@@ -42,6 +52,8 @@ class Auth:
 
     def create_session(self, email: str) -> str:
         """ Creates session for user
+            Args:
+                - email: user's email
             Return:
                 - created session_id
         """
@@ -56,6 +68,8 @@ class Auth:
 
     def get_user_from_session_id(self, session_id: str) -> User:
         """ Gets user based on their session id
+            Args:
+                - session_id: user's session_id
             Return:
                 - User if found else None
         """
@@ -76,6 +90,8 @@ class Auth:
 
     def get_reset_password_token(self, email: str) -> str:
         """ Generates reset password token for valid user
+            Args:
+                - email: user's email
             Return:
                 - reset password token
         """
@@ -87,6 +103,23 @@ class Auth:
         reset_token = _generate_uuid()
         db.update_user(user.id, reset_token=reset_token)
         return reset_token
+
+    def update_password(self, reset_token: str, password: str) -> None:
+        """ Update password for user with matching reset token
+            Args:
+                - reset_toke: user's reset token
+                - password: new password
+            Return:
+                - None
+        """
+        if not reset_token:
+            return
+        db = self._db
+        try:
+            user = db.find_user_by(reset_token=reset_token)
+        except NoResultFound:
+            raise ValueError
+        db.update_user(user.id, password=_hash_password(password))
 
 
 def _hash_password(password: str) -> bytes:
@@ -102,5 +135,7 @@ def _hash_password(password: str) -> bytes:
 
 def _generate_uuid() -> str:
     """ Generates unique ids
+        Return:
+            - UUID generated
     """
     return str(uuid4())
