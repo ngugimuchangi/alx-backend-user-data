@@ -112,8 +112,6 @@ class Auth:
             Return:
                 - None
         """
-        if not reset_token:
-            raise ValueError
         db = self._db
         try:
             user = db.find_user_by(reset_token=reset_token)
