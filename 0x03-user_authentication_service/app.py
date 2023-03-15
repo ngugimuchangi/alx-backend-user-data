@@ -4,6 +4,7 @@ Flask app
 """
 from auth import Auth
 from flask import Flask, jsonify, request
+from typing import Tuple
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
@@ -18,7 +19,7 @@ def home() -> str:
 
 
 @app.route("/users", methods=["POST"])
-def register_user() -> tuple[str, int]:
+def register_user() -> Tuple[str, int]:
     """ Register's new user
     """
     email = request.form.get("email")
