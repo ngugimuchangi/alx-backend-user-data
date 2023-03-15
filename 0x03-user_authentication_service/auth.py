@@ -9,17 +9,6 @@ from uuid import uuid4
 from sqlalchemy.orm.exc import NoResultFound
 
 
-def _hash_password(password: str) -> bytes:
-    """ Creates password hash
-        Args:
-            - password: user password
-        Return:
-            - hashed password
-    """
-    e_pwd = password.encode()
-    return bcrypt.hashpw(e_pwd, bcrypt.gensalt())
-
-
 class Auth:
     """Auth class to interact with the authentication database.
     """
@@ -51,7 +40,19 @@ class Auth:
             return False
         return True
 
-    def _generate_uuid():
-        """ Generates unique ids
-        """
-        return str(uuid4())
+
+def _hash_password(password: str) -> bytes:
+    """ Creates password hash
+        Args:
+            - password: user password
+        Return:
+            - hashed password
+    """
+    e_pwd = password.encode()
+    return bcrypt.hashpw(e_pwd, bcrypt.gensalt())
+
+
+def _generate_uuid() -> str:
+    """ Generates unique ids
+    """
+    return str(uuid4())
