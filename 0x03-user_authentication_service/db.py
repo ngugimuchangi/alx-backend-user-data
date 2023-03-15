@@ -64,7 +64,7 @@ class DB:
         attrs, vals = [], []
         for attr, val in kwargs.items():
             if not hasattr(User, attr):
-                raise InvalidRequestError
+                raise InvalidRequestError()
             attrs.append(getattr(User, attr))
             vals.append(val)
 
@@ -72,5 +72,5 @@ class DB:
         query = session.query(User)
         user = query.filter(tuple_(*attrs).in_([tuple(vals)])).first()
         if not user:
-            raise NoResultFound
+            raise NoResultFound()
         return user
