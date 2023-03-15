@@ -54,6 +54,18 @@ class Auth:
         db.update_user(user.id, session_id=session_id)
         return session_id
 
+    def get_user_from_session_id(self, session_id: str) -> User | None:
+        """ Gets user based on their session id
+            Return:
+                - User if found else None
+        """
+        db = self._db
+        try:
+            user = db.find_user_by(session_id=session_id)
+        except NoResultFound:
+            return None
+        return user
+
 
 def _hash_password(password: str) -> bytes:
     """ Creates password hash
