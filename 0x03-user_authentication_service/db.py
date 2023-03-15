@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """DB module
 """
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
+from sqlalchemy.exc import NoResultFound, InvalidRequestError
 
 from user import Base, User
 
@@ -44,3 +45,18 @@ class DB:
         session.add(new_user)
         session.commit()
         return new_user
+
+    def find_user_by(self, **kwargs: dict):
+        """ Find user by a given attribute
+        """
+        attr, val = tuple(kwargs.items())[0]
+        if not hasattr(User, attr):
+            raise InvalidRequestError
+
+        session = self.__session
+        user = session.execute(
+            text(f"SELECT * FROM users WHERE {attr}=:param"),
+            {"param": val}).first()
+        if not user:
+            raise NoResultFound
+        return user
