@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """DB module
 """
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, text, tuple_
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
@@ -41,25 +41,36 @@ class DB:
                 - new User object
         """
         session = self._session
-        new_user = User(email, hashed_password)
-        session.add(new_user)
-        session.commit()
+        try:
+            new_user = User(email=email, hashed_password=hashed_password)
+            session.add(new_user)
+            session.commit()
+        except Exception:
+            session.rollback()
+            new_user = None
         return new_user
 
     def find_user_by(self, **kwargs: dict):
         """ Find user by a given attribute
+            Args:
+                - Dictionary of attributes to use as search
+                  parameters
+            Return:
+                - User object
         """
         if not kwargs:
             raise InvalidRequestError
 
-        attr, val = tuple(kwargs.items())[0]
-        if not hasattr(User, attr):
-            raise InvalidRequestError
+        attrs, vals = [], []
+        for attr, val in kwargs.items():
+            if not hasattr(User, attr):
+                raise InvalidRequestError
+            attrs.append(getattr(User, attr))
+            vals.append(val)
 
-        session = self.__session
-        user = session.execute(
-            text(f"SELECT * FROM users WHERE {attr}=:param"),
-            {"param": val}).first()
+        session = self._session
+        query = session.query(User)
+        user = query.filter(tuple_(*attrs).in_([tuple(vals)])).first()
         if not user:
             raise NoResultFound
         return user
