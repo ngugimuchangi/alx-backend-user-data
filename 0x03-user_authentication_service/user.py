@@ -21,7 +21,7 @@ class User(Base):
 
     def __init__(self, email: str, hashed_password: str,
                  session_id: str = None, reset_token: str = None,
-                 **kwargs: dict) -> None:
+                 ) -> None:
         """ Create new User instance
         """
         self.email = email
@@ -30,9 +30,3 @@ class User(Base):
             self.session_id = session_id
         if reset_token:
             self.reset_token = reset_token
-
-        if not kwargs:
-            return
-        for attr, val in kwargs.items():
-            if hasattr(User, attr) and attr != 'id':
-                setattr(self, attr, val)
