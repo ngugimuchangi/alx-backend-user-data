@@ -18,19 +18,6 @@ def home() -> str:
     return jsonify({"message": "Bienvenue"})
 
 
-@app.route("/users", methods=["POST"])
-def users():
-    """ Register's new user
-    """
-    email = request.form.get("email")
-    password = request.form.get("password")
-    try:
-        AUTH.register_user(email, password)
-        return jsonify({"email": email, "message": "user created"})
-    except ValueError:
-        return jsonify({"message": "email already registered"}), 400
-
-
 @app.route("/sessions", methods=["POST"])
 def login():
     """ Logs in user after validating credentials
@@ -55,6 +42,30 @@ def logout():
         abort(403)
     AUTH.destroy_session(user.id)
     return redirect(url_for("home"))
+
+
+@app.route("/users", methods=["POST"])
+def users():
+    """ Register's new user
+    """
+    email = request.form.get("email")
+    password = request.form.get("password")
+    try:
+        AUTH.register_user(email, password)
+        return jsonify({"email": email, "message": "user created"})
+    except ValueError:
+        return jsonify({"message": "email already registered"}), 400
+
+
+@app.route("/profile")
+def profile() -> str:
+    """ Check for user profile and returns user details
+    """
+    session_id = request.cookies.get("session_id")
+    user = AUTH.get_user_from_session_id(session_id)
+    if not user:
+        abort(403)
+    return jsonify({"email": user.email})
 
 
 if __name__ == "__main__":
