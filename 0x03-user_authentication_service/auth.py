@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
+"""
+Authentication module
+"""
 import bcrypt
 
 
-def _hashed_password(password: str) -> bytes:
+
+def _hash_password(password: str) -> bytes:
     """ Creates password hash
         Args:
             - password: user password
