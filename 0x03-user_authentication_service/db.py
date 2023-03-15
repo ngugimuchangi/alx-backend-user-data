@@ -49,6 +49,9 @@ class DB:
     def find_user_by(self, **kwargs: dict):
         """ Find user by a given attribute
         """
+        if not kwargs:
+            raise InvalidRequestError
+
         attr, val = tuple(kwargs.items())[0]
         if not hasattr(User, attr):
             raise InvalidRequestError
