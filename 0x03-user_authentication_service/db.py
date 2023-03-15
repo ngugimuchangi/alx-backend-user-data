@@ -49,7 +49,7 @@ class DB:
             new_user = None
         return new_user
 
-    def find_user_by(self, **kwargs: dict):
+    def find_user_by(self, **kwargs: dict) -> User:
         """ Find user by a given attribute
             Args:
                 - Dictionary of attributes to use as search
@@ -68,6 +68,6 @@ class DB:
         session = self._session
         query = session.query(User)
         user = query.filter(tuple_(*attrs).in_([tuple(vals)])).first()
-        if not user:
+        if user is None:
             raise NoResultFound()
         return user
