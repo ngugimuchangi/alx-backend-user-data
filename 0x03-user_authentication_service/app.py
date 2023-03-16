@@ -14,6 +14,8 @@ AUTH = Auth()
 @app.route("/")
 def home() -> str:
     """ Home endpoint
+        Return:
+            - Logout message JSON represented
     """
     return jsonify({"message": "Bienvenue"})
 
@@ -21,6 +23,12 @@ def home() -> str:
 @app.route("/sessions", methods=["POST"])
 def login():
     """ Login endpoint
+        Form fields:
+            - email
+            - password
+        Return:
+            - user email and login message JSON represented
+            - 401 if credential are invalid
     """
     email = request.form.get("email")
     password = request.form.get("password")
@@ -35,6 +43,8 @@ def login():
 @app.route("/sessions", methods=["DELETE"])
 def logout():
     """ Logout endpoint
+        Return:
+            - redirect to home page
     """
     session_id = request.cookies.get("session_id")
     user = AUTH.get_user_from_session_id(session_id)
@@ -47,6 +57,9 @@ def logout():
 @app.route("/users", methods=["POST"])
 def users():
     """ New user signup endpoint
+        Form fields:
+            - email
+            - password
     """
     email = request.form.get("email")
     password = request.form.get("password")
@@ -60,6 +73,9 @@ def users():
 @app.route("/profile")
 def profile() -> str:
     """ User profile endpoint
+        Return:
+            - user email JSON represented
+            - 403 if session_id is not linked to any user
     """
     session_id = request.cookies.get("session_id")
     user = AUTH.get_user_from_session_id(session_id)
@@ -71,6 +87,11 @@ def profile() -> str:
 @app.route("/reset_password", methods=["POST"])
 def get_reset_password_token() -> str:
     """ Reset password token endpoint
+        Form fields:
+            - email
+        Return:
+            - email and reset token JSON represented
+            - 403 if email is not associated with any user
     """
     email = request.form.get("email")
     try:
@@ -84,10 +105,18 @@ def get_reset_password_token() -> str:
 @app.route("/reset_password", methods=["PUT"])
 def update_password():
     """ Password update endpoint
+        Form fields:
+            - email
+            - reset_token
+            - new_password
+        Return:
+            - user email and password update message JSON represented
+            - 403 if reset token is not provided or not linked to any user
     """
     email = request.form.get("email")
-    reset_token = request.form.get("reset_token")
     new_password = request.form.get("new_password")
+    reset_token = request.form.get("reset_token")
+
     try:
         AUTH.update_password(reset_token, new_password)
     except ValueError:
