@@ -1,7 +1,7 @@
 # 0x03. User authentication service
 
 ## About
-A user authentication API that users session authentication
+A session based user authentication API
 
 ## Files
 - [app.py](app.py): API entry point 
